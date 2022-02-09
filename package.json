@@ -1,5 +1,5 @@
 {
-  "name": "myjam-catalog-service-core",
+  "name": "@myjam/catalog-service-core",
   "private": true,
   "main": "lib/index.js",
   "dependencies": {
