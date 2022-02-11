@@ -9,6 +9,9 @@
     "got": "^11.8.2",
     "pg": "^8.7.1"
   },
+  "devDependencies": {
+    "prettier": "^2.5.1"
+  },
   "license": "GPL-2.0",
   "author": {
     "name": "Ammar K.",
