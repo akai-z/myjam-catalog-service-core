@@ -10,6 +10,7 @@
     "pg": "^8.7.1"
   },
   "devDependencies": {
+    "eslint": "^8.9.0",
     "prettier": "^2.5.1"
   },
   "license": "GPL-2.0",
