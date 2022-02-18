@@ -4,7 +4,8 @@
   "private": true,
   "main": "lib/index.js",
   "scripts": {
-    "prettier-check": "prettier --check ./lib"
+    "prettier-check": "prettier --check ./lib",
+    "prettier-fix": "prettier --write ./lib"
   },
   "dependencies": {
     "airtable": "^0.11.1",
