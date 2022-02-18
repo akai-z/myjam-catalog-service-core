@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "main": "lib/index.js",
+  "scripts": {
+    "prettier-check": "prettier --check ./lib"
+  },
   "dependencies": {
     "airtable": "^0.11.1",
     "algoliasearch": "^4.12.1",
