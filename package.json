@@ -6,6 +6,7 @@
   "scripts": {
     "eslint-check": "eslint ./lib",
     "eslint-fix": "eslint ./lib --fix",
+    "lint": "npm run prettier-check && npm run eslint-check",
     "prettier-check": "prettier --check ./lib",
     "prettier-fix": "prettier --write ./lib"
   },
