@@ -7,6 +7,7 @@
     "eslint-check": "eslint ./lib",
     "eslint-fix": "eslint ./lib --fix",
     "lint": "npm run prettier-check && npm run eslint-check",
+    "lint-fix": "npm run prettier-fix && npm run eslint-fix",
     "prettier-check": "prettier --check ./lib",
     "prettier-fix": "prettier --write ./lib"
   },
