@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Prettier and ESLint node dev packages.
+- `Prettier` and `ESLint` node dev packages.
 - trailing commas to some JS files code.
 - `.gitignore` file.
 
