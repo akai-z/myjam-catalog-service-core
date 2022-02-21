@@ -3,11 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "main": "lib/index.js",
+  "scripts": {
+    "eslint-check": "eslint ./lib",
+    "eslint-fix": "eslint ./lib --fix",
+    "lint": "npm run prettier-check && npm run eslint-check",
+    "lint-fix": "npm run prettier-fix && npm run eslint-fix",
+    "prettier-check": "prettier --check ./lib",
+    "prettier-fix": "prettier --write ./lib"
+  },
   "dependencies": {
     "airtable": "^0.11.1",
     "algoliasearch": "^4.12.1",
     "got": "^11.8.2",
     "pg": "^8.7.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.9.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.5.1"
   },
   "license": "GPL-2.0",
   "author": {
