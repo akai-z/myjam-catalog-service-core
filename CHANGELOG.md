@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Prettier and ESLint node dev packages.
 - trailing commas to some JS files code.
+- `.gitignore` file.
 
 ### Changed
 - Apply some formatting to pgsql module.
