@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - The version number in `package.json` file.
+- Version `0.2.0` changes link in changelog file.
 
 ## [0.2.0] - 2022-02-21
 ### Added
@@ -23,5 +24,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial release.
 
 [Unreleased]: https://github.com/my-jam-store/catalog-service-core/compare/0.2.0...HEAD
-[0.2.0]: https://github.com/my-jam-store/catalog-service-core/releases/tag/0.2.0
+[0.2.0]: https://github.com/my-jam-store/catalog-service-core/compare/0.1.0...0.2.0
 [0.1.0]: https://github.com/my-jam-store/catalog-service-core/releases/tag/0.1.0
