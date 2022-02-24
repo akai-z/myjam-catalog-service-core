@@ -1,11 +1,14 @@
-const HttpError = require('../../error/http')
+import { SearchIndex } from '@algolia/client-search'
+import HttpError from '../../error/http'
 
-class Algolia {
-  constructor(index) {
+export default class Algolia {
+  private index: SearchIndex
+
+  constructor(index: SearchIndex) {
     this.index = index
   }
 
-  async indexData(data) {
+  async indexData(data: Record<string, unknown>[]): Promise<void> {
     try {
       await this.index.saveObjects(data)
     } catch (err) {
@@ -14,7 +17,7 @@ class Algolia {
     }
   }
 
-  async clearData() {
+  async clearData(): Promise<void> {
     try {
       await this.index.clearObjects()
     } catch (err) {
@@ -23,5 +26,3 @@ class Algolia {
     }
   }
 }
-
-module.exports = Algolia

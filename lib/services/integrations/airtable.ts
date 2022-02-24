@@ -1,11 +1,16 @@
 const airtable = require('airtable')
-const got = require('got')
-const HttpError = require('../../error/http')
+import got, { RequestError } from 'got'
+import HttpError from '../../error/http'
 
 const apiBaseUrl = 'https://api.airtable.com/v0/'
 const defaultView = 'Grid view'
 
-async function findRecordByField(table, fieldName, fieldValue, additionalFilters = null) {
+export async function findRecordByField(
+  table: string,
+  fieldName: string,
+  fieldValue: string,
+  additionalFilters?: string,
+): Promise<Record<string, unknown> | null> {
   const selectParams = {
     filter: `{${fieldName}} = "${fieldValue}"`,
     maxRecords: 1,
@@ -20,9 +25,12 @@ async function findRecordByField(table, fieldName, fieldValue, additionalFilters
   return record.length ? { id: record[0].id, fields: record[0].fields } : null
 }
 
-async function listAllRecords(table, selectParams = {}) {
+export async function listAllRecords(
+  table: string,
+  selectParams?: Record<string, unknown>,
+): Promise<Record<string, unknown>[]> {
   const list = await tableSelect(table, selectParams).all()
-  const processedList = []
+  const processedList: Record<string, unknown>[] = []
 
   if (list) {
     for (const item of list) {
@@ -33,15 +41,24 @@ async function listAllRecords(table, selectParams = {}) {
   return processedList
 }
 
-async function listRecords(table, params = {}) {
+export async function listRecords(
+  table: string,
+  params?: Record<string, unknown>,
+): Promise<Record<string, unknown>[]> {
   const headers = { 'Content-Type': 'application/json; charset=UTF-8' }
   const response = await apiRequest('GET', table, params, headers)
 
-  return response
+  return !Array.isArray(response) ? [response] : response
 }
 
-async function apiRequest(httpMethod, table, params = {}, headers = null, body = null) {
-  const config = {
+async function apiRequest(
+  httpMethod: string,
+  table: string,
+  params?: Record<string, unknown>,
+  headers?: Record<string, string>,
+  body?: Record<string, unknown>,
+): Promise<Record<string, unknown> | Record<string, unknown>[]> {
+  const config: Record<string, unknown> = {
     method: httpMethod,
     headers: { Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}` },
     prefixUrl: apiUrl(),
@@ -49,7 +66,10 @@ async function apiRequest(httpMethod, table, params = {}, headers = null, body =
   }
 
   if (headers !== null) {
-    config.headers = { ...config.headers, ...headers }
+    config.headers = {
+      ...(config.headers as Record<string, string>),
+      ...headers,
+    }
   }
 
   if (body !== null) {
@@ -59,31 +79,40 @@ async function apiRequest(httpMethod, table, params = {}, headers = null, body =
   try {
     return await got(table, config).json()
   } catch (err) {
-    if ('statusCode' in err.response && 'body' in err.response) {
+    if (typeof err !== 'object' || !(err instanceof RequestError)) {
+      throw new HttpError(500, 'DB Error')
+    }
+
+    const error: RequestError = err
+
+    if ('statusCode' in error.response && 'body' in error.response) {
       console.log({
-        statusCode: err.response.statusCode,
-        body: err.response.body,
+        statusCode: error.response.statusCode,
+        body: error.response.body,
       })
     }
 
-    throw new HttpError('statusCode' in err.response ? err.response.statusCode : 500, 'DB Error')
+    throw new HttpError(
+      'statusCode' in error.response ? error.response.statusCode : 500,
+      'DB Error',
+    )
   }
 }
 
-function apiUrl() {
+function apiUrl(): string {
   return apiBaseUrl + process.env.CATALOG_AIRTABLE_BASE_ID
 }
 
-function base(table) {
+function base(table: string) {
   return airtable.base(process.env.CATALOG_AIRTABLE_BASE_ID)(table)
 }
 
-function tableSelect(table, params = {}) {
+function tableSelect(table: string, params?: Record<string, unknown>) {
   return base(table).select(selectParams(params))
 }
 
-function selectParams(params = {}) {
-  const resolvedParams = { view: defaultView }
+function selectParams(params?: Record<string, unknown>): Record<string, unknown> {
+  const resolvedParams: Record<string, unknown> = { view: defaultView }
 
   if (!params) {
     return resolvedParams
@@ -114,10 +143,4 @@ function selectParams(params = {}) {
   }
 
   return resolvedParams
-}
-
-module.exports = {
-  findRecordByField,
-  listAllRecords,
-  listRecords,
 }

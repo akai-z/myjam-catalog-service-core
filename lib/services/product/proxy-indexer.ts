@@ -1,23 +1,26 @@
-const product = require('../proxied-product')
-const indexer = require('./indexer')
+import * as product from '../proxied-product'
+import * as indexer from './indexer'
 
 const listPageSize = 3000
 
-async function indexData(filter = '', filterValues = []) {
+export async function indexData(
+  filter = '',
+  filterValues: Array<string | number> = [],
+): Promise<void> {
   const listTotalSize = await product.listSize(filter, filterValues)
 
   if (listTotalSize.count == 0) {
     return
   }
 
-  const pagesCount = Math.ceil(listTotalSize.count / listPageSize)
+  const pagesCount = Math.ceil((listTotalSize.count as number) / listPageSize)
   const algolia = indexer.algoliaInit()
   let productsData
   let productsBatch
 
   for (let pageNumber = 1; pageNumber <= pagesCount; pageNumber++) {
-    productsBatch = await product.list(pageNumber, listPageSize, filter, filterValues, listPageSize)
     productsData = []
+    productsBatch = await product.list(pageNumber, listPageSize, filter, filterValues, listPageSize)
 
     for (const productData of productsBatch) {
       productData['objectID'] = productData['id']
@@ -28,16 +31,10 @@ async function indexData(filter = '', filterValues = []) {
   }
 }
 
-async function reindexData() {
+export async function reindexData(): Promise<void> {
   await indexData("last_modified >= NOW() - INTERVAL '24 HOURS'")
 }
 
-async function clearData() {
+export async function clearData(): Promise<void> {
   await indexer.clearData()
-}
-
-module.exports = {
-  indexData,
-  reindexData,
-  clearData,
 }

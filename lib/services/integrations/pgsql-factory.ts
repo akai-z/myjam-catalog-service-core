@@ -1,5 +1,5 @@
-const { Pool } = require('pg')
-const PgSql = require('./pgsql')
+import { Pool } from 'pg'
+import { PgSql } from './pgsql'
 
 const schema = process.env.CATALOG_PGSQL_SCHEMA || 'airtable'
 
@@ -14,14 +14,10 @@ const connectionInfo = {
   },
 }
 
-function create(idField = null) {
+export function create(idField?: string): PgSql {
   return new PgSql(createPool(), schema, idField)
 }
 
-function createPool() {
+function createPool(): Pool {
   return new Pool(connectionInfo)
-}
-
-module.exports = {
-  create,
 }
